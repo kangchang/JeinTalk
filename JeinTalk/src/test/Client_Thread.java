@@ -5,7 +5,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Test_Client_Thread {
+public class Client_Thread {
 
 	private static String server_IP = "192.168.0.227";
 	private static int server_PORT = 8081;

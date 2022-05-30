@@ -8,7 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Test_Server_Thread{
+public class Server_Thread{
 	
 	private static String server_IP = "192.168.0.227";
 	private static int server_PORT = 8081;
