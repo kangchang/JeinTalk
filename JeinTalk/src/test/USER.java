@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class USER implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String message;
-	private String name = "강창희";
+	private String name = "조훈희";
 	
 	public void setMessage(String message) {
 		this.message = message;

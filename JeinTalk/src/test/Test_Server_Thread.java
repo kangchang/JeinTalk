@@ -10,8 +10,8 @@ import java.util.Scanner;
 
 public class Test_Server_Thread{
 	
-	private static String server_IP = "192.168.0.227";
-	private static int server_PORT = 8081;
+	private static String server_IP = "192.168.0.242";
+	private static int server_PORT = 9998;
 	private static String message;
 	private static String name;
 	private static String server_message;

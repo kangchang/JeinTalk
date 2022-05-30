@@ -7,8 +7,8 @@ import java.util.Scanner;
 
 public class Test_Client_Thread {
 
-	private static String server_IP = "192.168.0.227";
-	private static int server_PORT = 8081;
+	private static String server_IP = "192.168.0.242";
+	private static int server_PORT = 9998;
 	
 	private static ObjectInputStream in;
 	private static ObjectOutputStream out;
@@ -36,6 +36,9 @@ public class Test_Client_Thread {
 				in = new ObjectInputStream(client.getInputStream());
 				user = (USER) in.readObject();
 				System.out.println(user.toString());
+				
+				in.close();
+				out.close();
 				
 				
 			} catch (Exception e) {
