@@ -1,11 +1,14 @@
 package test;
 
 import java.io.Serializable;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class USER implements Serializable{
 	private static final long serialVersionUID = 1L;
-	private String message;
-	private String name = "강창희";
+	private String message ="";
+	private String name="";
+	
 	
 	public void setMessage(String message) {
 		this.message = message;
@@ -22,6 +25,9 @@ public class USER implements Serializable{
 	}
 	
 	public String toString() {
-		return "Message: " + this.message + " Name : " + this.name;
+		LocalTime now = LocalTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+		String formateNow = now.format(formatter);
+		return formateNow + " = " + this.name + " : " + this.message;
 	}
 }
