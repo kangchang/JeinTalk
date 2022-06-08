@@ -1,10 +1,17 @@
 package test;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
@@ -13,18 +20,23 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 
+import db.DBConnection;
+
 public class Client {
-	private static String server_IP = "192.168.0.242";
-	private static int server_PORT = 8089;
+	
 	private static String client_name;
 	private static JFrame frame;
 	private static JTextField textField;
 	private static JTextField textField_1;
-	private SimpleDateFormat date = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
-	String loginDate = date.format(System.currentTimeMillis());
+	
+	private static SimpleDateFormat date = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
+	private static String loginDate = date.format(System.currentTimeMillis());
 
+	
+	
 	public static void main(String[] args) {
 		// =====================================Swing=====================================
 		int x = 120;
@@ -91,73 +103,77 @@ public class Client {
 		btnIdPassFind.revalidate();
 		btnIdPassFind.repaint();
 
+		
+		//회원가입
+		btnSign.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SignUp Sign = new SignUp();
+				Sign.Singup();
+			}
+        });
+		
+		
+		//회원정보찾기
+		btnIdPassFind.addActionListener(event->{
+        	new FindInfo();
+        });
+		
+		//로그인성공시
+		btnLogin.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					
+					DBConnection dbconn = new DBConnection();
+					Connection conn = dbconn.getConnection();
+					PreparedStatement pstmt = null;
+					
+					StringBuffer sql = new StringBuffer();
+					sql.append("SELECT id, pw, username FROM user WHERE id=?");
+
+					pstmt = conn.prepareStatement(sql.toString());
+					
+					pstmt.setString(1, textField.getText());
+					
+					ResultSet result = pstmt.executeQuery();
+					String getIdFromDb = null;
+					String getPwFromDb = null;
+					String getUserNameFromeDb = null;
+					while(result.next()) {
+						getIdFromDb = result.getString("id");
+						getPwFromDb = result.getString("pw");
+						getUserNameFromeDb = result.getString("username");
+					}
+					
+					if(textField.getText().equals(getIdFromDb) && textField_1.getText().equals(getPwFromDb)) {
+						ChatRoom chatroom = new ChatRoom(getUserNameFromeDb, loginDate);
+						chatroom.runChatRoom();
+						frame.setVisible(false);
+					} else {
+						System.out.println("로그인 실패");
+						JFrame jframe3 = new JFrame();
+						
+						
+					}
+					
+				} catch(Exception e1) {
+					e1.printStackTrace();
+				} finally {
+					
+				}
+			}
+            
+        });
 		// =====================================Swing=====================================
 
-//        Scanner scan = new Scanner(System.in);
-//        System.out.print("(최초실행 1회)당신의 이름을 입력해주세요 : ");
-//        client_name = scan.nextLine();
+		
 
-//        client_name = textField.getText();
-//        System.out.println(client_name);
+		
+		
 
-		client_name = "주지찬";
-		try {
 
-			// =====================================Swing=====================================
-			JFrame jframe = new JFrame();
-			jframe = new JFrame();
-			jframe.setBounds(100, 100, 800, 600);
-			jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			jframe.getContentPane().setLayout(null);
-			jframe.setLocationRelativeTo(null);
-			jframe.setResizable(false);
-			jframe.setVisible(true);
-
-			// 채팅창
-			JTextArea textArea1 = new JTextArea();
-			textArea1.setLineWrap(true);
-			textArea1.setBounds(45, 10, 690, 387);
-			textArea1.revalidate();
-			textArea1.repaint();
-
-			textArea1.setLineWrap(true);
-			textArea1.setWrapStyleWord(true);
-
-			JScrollPane scrollPane = new JScrollPane(textArea1);
-			scrollPane.setBounds(45, 10, 690, 387);
-			scrollPane.revalidate();
-			scrollPane.repaint();
-
-			jframe.getContentPane().add(scrollPane);
-			jframe.add(scrollPane);
-
-			// 입력창
-			JTextArea textArea2 = new JTextArea();
-			textArea2.setBounds(45, 422, 479, 93);
-			jframe.getContentPane().add(textArea2);
-			textArea2.revalidate();
-			textArea2.repaint();
-
-			JButton btnNewButton = new JButton("SEND");
-			btnNewButton.setFont(new Font("굴림", Font.BOLD, 18));
-			btnNewButton.setBounds(555, 423, 180, 92);
-
-			jframe.getContentPane().add(btnNewButton);
-			btnNewButton.revalidate();
-			btnNewButton.repaint();
-
-			// =====================================Swing=====================================
-
-			Socket client = new Socket(server_IP, server_PORT);
-			textArea1.append("서버와 연결 되었습니다.\n");
-			ClientOutputThread threadout = new ClientOutputThread(client, client_name, textArea1, textArea2,
-					btnNewButton);
-			threadout.start();
-			ClientInputThread threadin = new ClientInputThread(client, textArea1, textArea2, btnNewButton, scrollPane);
-			threadin.start();
-		} catch (Exception e) {
-			e.getStackTrace();
-		}
-
+		
 	}
+	
 }

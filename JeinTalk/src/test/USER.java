@@ -26,8 +26,9 @@ public class USER implements Serializable{
 	
 	public String toString() {
 		LocalTime now = LocalTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("a K:mm:ss");
 		String formateNow = now.format(formatter);
-		return formateNow + " = " + this.name + " : " + this.message;
+//		return  this.name + " : " + this.message + "            (" +formateNow + ")";
+		return  "(" +formateNow + ") " + this.name + " : " + this.message;
 	}
 }

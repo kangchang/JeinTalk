@@ -16,18 +16,18 @@ public class ServerInThread extends Thread {
 			this.in = new ObjectInputStream(socket.getInputStream());
 			this.out = new ObjectOutputStream(socket.getOutputStream());
 			MainServer.list.add(out);
+
 		} catch (Exception e) {
 			e.getStackTrace();
 		}
 	}
-	
 
 	@Override
 	public void run() {
 		while (true) {
 			try {
 				user = (String) in.readObject();
-				System.out.println(user);
+//				System.out.println(user);
 
 				send();
 			} catch (Exception e) {
@@ -35,15 +35,39 @@ public class ServerInThread extends Thread {
 			}
 		}
 	}
-
+	
+/*
 	public void send() {
 		for (int i = 0; i < (MainServer.list).size(); i++) {
 			try {
-				(MainServer.list.get(i)).writeObject((Object)user);
+				(MainServer.list.get(i)).writeObject((Object) user);
 				(MainServer.list.get(i)).flush();
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
+	*/
+	
+	public void send() {
+		for (int i = 0; i < (MainServer.list).size(); i++) {
+			try {
+				(MainServer.list.get(i)).writeObject((Object) (user));
+				(MainServer.list.get(i)).flush();
+			} catch (IOException e) {
+				MainServer.list.remove(i);
+				for ( int j = 0; j<(MainServer.list).size(); j++ ) {
+					try {
+						(MainServer.list.get(i)).writeObject("한명이 퇴장하였습니다.");
+						(MainServer.list.get(i)).flush();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+	
+	
 }
