@@ -23,8 +23,8 @@ public class ClientOutputThread extends Thread {
 	private String message;
 	private ObjectOutputStream thr_out_socket = null;
 	private USER user = new USER();
-	private SimpleDateFormat date = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
-	String loginDate = date.format(System.currentTimeMillis());
+//	private SimpleDateFormat date = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
+//	String loginDate = date.format(System.currentTimeMillis());
 
 	private JTextArea jTextArea1;
 	private JTextArea jTextArea2;
@@ -47,9 +47,6 @@ public class ClientOutputThread extends Thread {
 
 	@Override
 	public void run() {
-		Scanner scan = new Scanner(System.in);
-		System.out.println("My name : " + name + " / 접속한 시간 : " + loginDate);
-
 		jButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -59,8 +56,6 @@ public class ClientOutputThread extends Thread {
 						user.setMessage(message);
 						user.setName(name);
 						thr_out_socket.writeObject((Object) (user.toString()));// 읽는거
-						// jTextArea1.append(user.toString() + "\n\n");// 쓰는거
-
 						jTextArea2.setText("");
 						thr_out_socket.flush();
 					} catch (Exception e1) {
