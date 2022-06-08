@@ -20,12 +20,13 @@ public class ServerInThread extends Thread {
 			e.getStackTrace();
 		}
 	}
+	
 
 	@Override
 	public void run() {
 		while (true) {
 			try {
-				user = (String)in.readObject();
+				user = (String) in.readObject();
 				System.out.println(user);
 
 				send();
