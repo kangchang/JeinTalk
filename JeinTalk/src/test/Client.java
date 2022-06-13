@@ -34,6 +34,8 @@ public class Client {
 	protected static JFrame frame;
 	protected static JTextField textField;
 	protected static JPasswordField textField_1;
+	protected static JTextField textField_2;
+	protected static JTextField textField_3;
 	private static JLabel alertMessage;
 
 	private static SimpleDateFormat date = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
@@ -48,7 +50,7 @@ public class Client {
 	public static void main(String[] args) {
 		// =====================================Swing=====================================
 
-		frame = new JFrame();
+		frame = new JFrame("JeinTalk");
 		frame.setBounds(120, 120, 500, 400);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
@@ -68,11 +70,23 @@ public class Client {
 		lblNewLabel_1.setBounds(50, 88, 108, 28);
 		frame.getContentPane().add(lblNewLabel_1);
 
-		JLabel lblNewLabel_1_1 = new JLabel("Password");
-		lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1_1.setFont(new Font("굴림", Font.PLAIN, 20));
-		lblNewLabel_1_1.setBounds(50, 120, 108, 28);
-		frame.getContentPane().add(lblNewLabel_1_1);
+		JLabel lblNewLabel_2 = new JLabel("Password");
+		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_2.setFont(new Font("굴림", Font.PLAIN, 20));
+		lblNewLabel_2.setBounds(50, 120, 108, 28);
+		frame.getContentPane().add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_3 = new JLabel("Ip");
+		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_3.setFont(new Font("굴림", Font.PLAIN, 20));
+		lblNewLabel_3.setBounds(50, 150, 108, 28);
+		frame.getContentPane().add(lblNewLabel_3);
+		
+		JLabel lblNewLabel_4 = new JLabel("Port");
+		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_4.setFont(new Font("굴림", Font.PLAIN, 20));
+		lblNewLabel_4.setBounds(50, 180, 108, 28);
+		frame.getContentPane().add(lblNewLabel_4);
 
 		textField = new JTextField();
 		textField.setBounds(190, 86, 129, 21);
@@ -87,6 +101,23 @@ public class Client {
 		frame.getContentPane().add(textField_1);
 		textField_1.revalidate();
 		textField_1.repaint();
+		
+		textField_2 = new JTextField("192.168.0.###");
+		textField_2.setColumns(10);
+		textField_2.setBounds(190, 156, 129, 21);
+		frame.getContentPane().add(textField_2);
+		textField_2.revalidate();
+		textField_2.repaint();
+		
+		textField_3 = new JTextField("0000");
+		textField_3.setColumns(10);
+		textField_3.setBounds(190, 186, 129, 21);
+		frame.getContentPane().add(textField_3);
+		textField_3.revalidate();
+		textField_3.repaint();
+		
+		
+		
 
 		textField_1.addKeyListener(new KeyAdapter() {
 			@Override
@@ -98,6 +129,9 @@ public class Client {
 						} else { // Enter = 전송
 							try {
 								// 로그인 확인
+								String ip = textField_2.getText();
+								int port = Integer.parseInt(textField_3.getText());
+								
 								sql.setLength(0);
 								sql.append("SELECT id, pw, username FROM user WHERE id=?");
 								pstmt = conn.prepareStatement(sql.toString());
@@ -120,7 +154,7 @@ public class Client {
 
 								if (textField.getText().equals(getIdFromDb)
 										&& textField_1.getText().equals(getPwFromDb)) {
-									ChatRoom chatroom = new ChatRoom(getIdFromDb, getUserNameFromeDb, loginDate);
+									ChatRoom chatroom = new ChatRoom(getIdFromDb, getUserNameFromeDb, loginDate, ip, port);
 									chatroom.runChatRoom();
 									frame.setVisible(false);
 								} else {
@@ -138,6 +172,9 @@ public class Client {
 				}
 			}
 		});
+		
+		
+		
 
 		alertMessage = new JLabel();
 		alertMessage.setBounds(190, 156, 180, 21);
@@ -154,13 +191,13 @@ public class Client {
 		btnLogin.repaint();
 
 		JButton btnSign = new JButton("회원가입");
-		btnSign.setBounds(125, 189, 100, 23);
+		btnSign.setBounds(125, 229, 100, 23);
 		frame.getContentPane().add(btnSign);
 		btnSign.revalidate();
 		btnSign.repaint();
 
 		JButton btnIdPassFind = new JButton("ID/Pw 찾기");
-		btnIdPassFind.setBounds(240, 189, 100, 23);
+		btnIdPassFind.setBounds(240, 229, 100, 23);
 		frame.getContentPane().add(btnIdPassFind);
 		btnIdPassFind.revalidate();
 		btnIdPassFind.repaint();
@@ -185,6 +222,9 @@ public class Client {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					// 로그인 확인
+					String ip = textField_2.getText();
+					int port = Integer.parseInt(textField_3.getText());
+					
 					sql.setLength(0);
 					sql.append("SELECT id, pw, username FROM user WHERE id=?");
 					pstmt = conn.prepareStatement(sql.toString());
@@ -206,7 +246,7 @@ public class Client {
 					result = pstmt.executeQuery();
 
 					if (textField.getText().equals(getIdFromDb) && textField_1.getText().equals(getPwFromDb)) {
-						ChatRoom chatroom = new ChatRoom(getIdFromDb, getUserNameFromeDb, loginDate);
+						ChatRoom chatroom = new ChatRoom(getIdFromDb, getUserNameFromeDb, loginDate, ip, port);
 						chatroom.runChatRoom();
 						frame.setVisible(false);
 					} else {
@@ -221,7 +261,6 @@ public class Client {
 			}
 
 		});
-		
 		// =====================================Swing=====================================
 	}
 

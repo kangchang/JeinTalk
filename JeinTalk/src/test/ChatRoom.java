@@ -26,9 +26,12 @@ import javax.swing.event.DocumentListener;
 
 import db.DBConnection;
 
+
 public class ChatRoom {
-	private static String server_IP = "192.168.0.242";
-	private static int server_PORT = 8091;
+//	private static String server_IP = "192.168.0.157";
+//	private static int server_PORT = 8081;
+	private String server_IP;
+	private int server_PORT;
 
 	private static JFrame jFrameList = new JFrame("참여자 리스트");
 	private static JTextArea jFrameListTextArea = new JTextArea();
@@ -62,9 +65,12 @@ public class ChatRoom {
 	StringBuffer sql = new StringBuffer();
 	int result;
 	
-	public ChatRoom(String id, String name, String loginDate) {
+	public ChatRoom(String id, String name, String loginDate, String ip, int port ) {
 		this.id = id;
 		this.name = name;
+		this.server_IP = ip;
+		this.server_PORT = port;
+		
 		this.loginDate = loginDate;
 	}
 	
