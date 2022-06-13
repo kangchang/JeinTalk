@@ -14,6 +14,10 @@ public class DBConnection {
 		this.conn = connectToDB();
 	}
 	
+	
+	
+	
+	
 	public Connection getConnection() {
 		return this.conn;
 	}
